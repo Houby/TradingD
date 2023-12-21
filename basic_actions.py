@@ -60,3 +60,22 @@ def set_leverage(symbol, buyLeverage, sellLeverage, category='linear'):
     }
 
     response = requests.post(url=url, headers=headers, data=data)
+
+# запрос баланса аккаунта
+def get_wallet_balance(accountType='CONTRACT', coin='USDT'):
+    queryString = "accountType=" + accountType + "&coin=" + coin
+    url = 'https://api.bybit.com/v5/account/wallet-balance?' + queryString
+    current_time = int(time.time() * 1000)
+    sign = hashing(str(current_time) + api_key + '5000' + queryString)
+
+    headers = {
+        'X-BAPI-API-KEY': api_key,
+        'X-BAPI-TIMESTAMP': str(current_time),
+        'X-BAPI-SIGN': sign,
+        'X-BAPI-RECV-WINDOW': str(5000)
+    }
+
+    response = requests.get(url=url, headers=headers)
+    dataParsed = json.loads(response.text)
+    realWalletBalance = float(dataParsed['result']['list'][0]['coin'][0]['walletBalance'])
+    return realWalletBalance
