@@ -11,7 +11,7 @@ def hashing(query_string):
     return hmac.new(secret_key.encode('utf-8'), query_string.encode('utf-8'), hashlib.sha256).hexdigest()
 
 # запрос рыночной цены
-def market_price(symbol, category='linear'):
+def get_market_price(symbol, category='linear'):
     queryString = "category=" + category + "&symbol=" + symbol
     url = 'https://api.bybit.com/v5/market/tickers?' + queryString
     current_time = int(time.time() * 1000)
@@ -79,3 +79,28 @@ def get_wallet_balance(accountType='CONTRACT', coin='USDT'):
     dataParsed = json.loads(response.text)
     realWalletBalance = float(dataParsed['result']['list'][0]['coin'][0]['walletBalance'])
     return realWalletBalance
+
+def get_position_info(symbol, category='linear'):
+    queryString = "category=" + category + "&symbol=" + symbol
+    url = 'https://api.bybit.com/v5/position/list?' + queryString
+    current_time = int(time.time() * 1000)
+    sign = hashing(str(current_time) + api_key + '5000' + queryString)
+
+    headers = {
+        'X-BAPI-API-KEY': api_key,
+        'X-BAPI-TIMESTAMP': str(current_time),
+        'X-BAPI-SIGN': sign,
+        'X-BAPI-RECV-WINDOW': str(5000)
+    }
+
+    response = requests.get(url=url, headers=headers)
+    print(response.text)
+    dataParsed = json.loads(response.text)
+    if float(dataParsed['result']['list'][0]['size']) != 0:
+        createOrderTime = dataParsed['result']['list'][0]['updatedTime']
+        orderSize = dataParsed['result']['list'][0]['size']
+        orderSide = dataParsed['result']['list'][0]['side']
+        print(createOrderTime, orderSize, orderSide)
+        return [createOrderTime, orderSize, orderSide]
+    else:
+        return "error"
