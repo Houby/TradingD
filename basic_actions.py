@@ -104,3 +104,26 @@ def get_position_info(symbol, category='linear'):
         return [createOrderTime, orderSize, orderSide]
     else:
         return "error"
+
+def create_symbol(currency_list, currency_parameter):
+    return currency_list + currency_parameter
+
+def get_historical_interval(symbol, interval, start, end, limit, category='linear'):
+    queryString = "category=" + category + "&symbol=" + symbol + "&interval=" + interval + "&start=" + str(start) + "&end=" + str(end) + "&limit=" + limit
+    url = 'https://api.bybit.com/v5/market/kline?' + queryString
+    current_time = int(time.time() * 1000)
+    sign = hashing(str(current_time) + api_key + '5000' + queryString)
+
+    headers = {
+        'X-BAPI-API-KEY': api_key,
+        'X-BAPI-TIMESTAMP': str(current_time),
+        'X-BAPI-SIGN': sign,
+        'X-BAPI-RECV-WINDOW': str(5000)
+    }
+
+    response = requests.get(url=url, headers=headers)
+    dataParsed = json.loads(response.text)
+    if dataParsed['retMsg'] == 'OK':
+        return(dataParsed)
+    else:
+        return "error"
