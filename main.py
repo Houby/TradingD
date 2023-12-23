@@ -14,10 +14,10 @@ def market_open_order(symbol, side, order_type, qty, category='linear'):
 
     if side == 'Sell':
         stop_loss = round(float(current_crypto_price) * 1.01, count_zn)
-        take_profit = round(float(current_crypto_price) * 0.98, count_zn)
+        take_profit = round(float(current_crypto_price) * 0.985, count_zn)
     elif side == 'Buy':
         stop_loss = round(float(current_crypto_price) * 0.99, count_zn)
-        take_profit = round(float(current_crypto_price) * 1.02, count_zn)
+        take_profit = round(float(current_crypto_price) * 1.015, count_zn)
     data = '{' + f'"symbol": "{symbol}", "side": "{side}", "orderType": "{order_type}", "qty": "{qty}", "category": "{category}", "stopLoss": "{stop_loss}", "takeProfit": "{take_profit}"' + '}'
     sign = hashing(str(current_time) + api_key + '5000' + data)
 
@@ -56,12 +56,13 @@ def candles_imagine(symbol):
 
 def open_trade(leverage):
     parse_n = 0
+    wallet_balance = get_wallet_balance()
     for x in currency_list:
         symbol_ticker = x + currency_parameter
         parse_n += 1
         print(symbol_ticker)
         market_price = get_market_price(symbol=symbol_ticker)
-        order_qnt = math.floor(17 / 100 * float(leverage) / float(market_price))
+        order_qnt = math.floor(float(wallet_balance) / 100 * float(leverage) / float(market_price))
         data_out = candles_imagine(symbol=symbol_ticker)
 
         if data_out == 'MPP' or data_out == 'MPM' or data_out == 'MPO':
