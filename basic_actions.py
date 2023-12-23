@@ -133,6 +133,6 @@ def get_historical_interval(symbol, interval, start, end, limit, category='linea
     response = requests.get(url=url, headers=headers)
     data_parsed = json.loads(response.text)
     if data_parsed['retMsg'] == 'OK':
-        return(data_parsed)
+        return data_parsed
     else:
         return "error"
