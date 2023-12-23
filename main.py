@@ -1,7 +1,9 @@
-from basic_actions import *
 import schedule
 
+from basic_actions import *
 
+
+# Получение последних трёх свечей
 def candles_imagine(symbol):
     data_out = ''
     start_date = int(time.time() * 1000) - 43200000
@@ -24,7 +26,6 @@ def candles_imagine(symbol):
 
 
 def open_trade():
-
     return
 
 
