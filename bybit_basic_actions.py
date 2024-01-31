@@ -51,10 +51,10 @@ def cancel_all_order(symbol, category='linear'):
 
 
 # установка плечей
-def set_leverage(symbol, buyLeverage, sellLeverage, category='linear'):
+def set_leverage(symbol, buy_leverage, sell_leverage, category='linear'):
     url = 'https://api.bybit.com/v5/position/set-leverage'
     current_time = int(time.time() * 1000)
-    data = '{' + f'"symbol": "{symbol}", "buyLeverage": "{buyLeverage}", "sellLeverage": "{sellLeverage}", "category": "{category}"' + '}'
+    data = '{' + f'"symbol": "{symbol}", "buyLeverage": "{buy_leverage}", "sellLeverage": "{sell_leverage}", "category": "{category}"' + '}'
     sign = hashing(str(current_time) + api_key + '5000' + data)
 
     headers = {
@@ -68,8 +68,8 @@ def set_leverage(symbol, buyLeverage, sellLeverage, category='linear'):
 
 
 # запрос баланса аккаунта
-def get_wallet_balance(accountType='CONTRACT', coin='USDT'):
-    query_string = "accountType=" + accountType + "&coin=" + coin
+def get_wallet_balance(account_type='CONTRACT', coin='USDT'):
+    query_string = "accountType=" + account_type + "&coin=" + coin
     url = 'https://api.bybit.com/v5/account/wallet-balance?' + query_string
     current_time = int(time.time() * 1000)
     sign = hashing(str(current_time) + api_key + '5000' + query_string)
@@ -87,6 +87,7 @@ def get_wallet_balance(accountType='CONTRACT', coin='USDT'):
     return real_wallet_balance
 
 
+# запрос позиции по тикеру
 def get_position_info(symbol, category='linear'):
     query_string = "category=" + category + "&symbol=" + symbol
     url = 'https://api.bybit.com/v5/position/list?' + query_string
@@ -113,10 +114,12 @@ def get_position_info(symbol, category='linear'):
         return "error"
 
 
-def create_symbol(currency_list, currency_parameter):
-    return currency_list + currency_parameter
+# создание торговой пары -- временно не используется
+# def create_symbol(currency_list, currency_parameter):
+#     return currency_list + currency_parameter
 
 
+# запрос свечей по интервалу
 def get_historical_interval(symbol, interval, start, end, limit, category='linear'):
     query_string = "category=" + category + "&symbol=" + symbol + "&interval=" + interval + "&start=" + str(start) + "&end=" + str(end) + "&limit=" + limit
     url = 'https://api.bybit.com/v5/market/kline?' + query_string

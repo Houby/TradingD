@@ -2,8 +2,8 @@ import math
 
 import schedule
 
-from basic_actions import *
-from currency_list import *
+from bybit_basic_actions import *
+from currencies import *
 
 
 def market_open_order(symbol, side, order_type, qty, category='linear'):
@@ -66,10 +66,10 @@ def open_trade(leverage):
         data_out = candles_imagine(symbol=symbol_ticker)
 
         if data_out == 'MPP' or data_out == 'MPM' or data_out == 'MPO':
-            set_leverage(symbol=symbol_ticker, buyLeverage=leverage, sellLeverage=leverage)
+            set_leverage(symbol=symbol_ticker, buy_leverage=leverage, sell_leverage=leverage)
             market_open_order(symbol=symbol_ticker, side='Buy', order_type='Market', qty=order_qnt)
         if data_out == 'PMM' or data_out == 'PMP' or data_out == 'PMO':
-            set_leverage(symbol=symbol_ticker, buyLeverage=leverage, sellLeverage=leverage)
+            set_leverage(symbol=symbol_ticker, buy_leverage=leverage, sell_leverage=leverage)
             market_open_order(symbol=symbol_ticker, side='Sell', order_type='Market', qty=order_qnt)
 
 
