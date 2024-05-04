@@ -14,7 +14,7 @@ def hashing(query_string):
 
 
 # запрос рыночной цены
-def get_market_price(symbol, category='linear'):
+def get_market_price(symbol, category = 'linear'):
     query_string = "category=" + category + "&symbol=" + symbol
     url = 'https://api.bybit.com/v5/market/tickers?' + query_string
     current_time = int(time.time() * 1000)
